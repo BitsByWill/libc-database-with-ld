@@ -1,4 +1,17 @@
 #!/bin/bash
+
+# From https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$SCRIPT_DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
+
+pushd $SCRIPT_DIR > /dev/null
+
 if [[ $# < 1 ]]; then
   echo >&2 "Usage: $0 id [name1 [name2 ...]]"
   exit 2
@@ -6,7 +19,7 @@ fi
 id=$1
 shift 1
 if [[ $# == 0 ]]; then
-  names="__libc_start_main_ret system dup2 read write str_bin_sh"
+  names="__libc_start_main_ret system dup2 read write str_bin_sh puts printf exit"
 else
   names="$@"
 fi
@@ -14,3 +27,5 @@ for name in $names; do
   offset=`cat db/${id}.symbols | grep "^$name " | cut -d' ' -f2`
   echo "offset_${name} = 0x${offset}"
 done
+
+popd > /dev/null

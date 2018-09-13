@@ -1,4 +1,17 @@
 #!/bin/bash
+
+# From https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$SCRIPT_DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
+
+pushd $SCRIPT_DIR > /dev/null
+
 if [[ $# != 1 ]]; then
   echo >&2 "Usage: $0 path/to/libc.so"
   exit 2
@@ -6,3 +19,5 @@ fi
 libc=$1
 sha1=`sha1sum $libc | awk '{print $1}'`
 sha1sum db/*.so | grep "$sha1 " | perl -n -e '/db\/(.*)\.so/&&print "id $1\n"'
+
+popd > /dev/null

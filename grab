@@ -12,35 +12,24 @@ SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
 
 pushd $SCRIPT_DIR > /dev/null
 
-function usage() {
-  echo >&2 "Usage: $0 name address [name address ...]"
+if [[ $# < 2 ]]; then
+  echo >&2 "Usage: $0 id path_to_copy"
   exit 2
-}
+fi
+id=$1
+pathcopy=$2
 
-function find_single() {
-  name=$1
-  address=$2
-  addr_last12=`echo -n "$address" | tail -c 3`
-  grep -i -e "^$name .*$addr_last12$" db/*.symbols \
-    | perl -n -e '/db\/(.*)\.symbols/ && print "$1\n"' \
-    | sort
-}
+if [ ! -d "$pathcopy" ]; then
+    echo "Error: directory to copy to does not exist."
+    exit 2
+fi
 
-function find() {
-  [[ $# < 2 ]] && usage
-  name=$1; shift
-  address=$1; shift
-  if [[ $# == 0 ]]; then
-    find_single $name $address
-  else
-    comm -12 \
-      <(find_single $name $address) \
-      <(find "$@")
-  fi
-}
+if ! [ -f "db/$id.so" ] || ! [ -f "db/$id.ld" ]; then
+    echo "Error: cannot find files for $id."
+    exit 2
+fi
 
-for id in `find "$@"`; do
-  echo "`cat db/${id}.info` (id $id)"
-done
+cp --interactive db/$id.ld $pathcopy/libc.so.6
+cp --interactive db/$id.so $pathcopy/ld-linux.so.2
 
 popd > /dev/null
