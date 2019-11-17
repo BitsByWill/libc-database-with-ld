@@ -1,3 +1,5 @@
+Forked from https://github.com/nnamon/libc-database-with-ld.  I just use this in CTFs because patchelf makes my life easier.  get file is modified because of an error I kept encountering about package issues on my distro.
+
 ## Building a libc offset and ld database
 
 Fetch all the configured libc and ld versions and extract the symbol offsets.
