@@ -41,12 +41,22 @@ get_current_ubuntu xenial amd64 libc6-i386
 get_current_ubuntu bionic i386 libc6
 get_current_ubuntu bionic amd64 libc6
 get_current_ubuntu bionic amd64 libc6-i386
-get_current_ubuntu cosmic i386 libc6
-get_current_ubuntu cosmic amd64 libc6
-get_current_ubuntu cosmic amd64 libc6-i386
-get_current_ubuntu disco i386 libc6
-get_current_ubuntu disco amd64 libc6
-get_current_ubuntu disco amd64 libc6-i386
+
+#get_current_ubuntu cosmic i386 libc6
+#get_current_ubuntu cosmic amd64 libc6
+#get_current_ubuntu cosmic amd64 libc6-i386
+
+#get_current_ubuntu disco i386 libc6
+#get_current_ubuntu disco amd64 libc6
+#get_current_ubuntu disco amd64 libc6-i386
+
+get_current_ubuntu eoan i386 libc6
+get_current_ubuntu eoan amd64 libc6
+get_current_ubuntu eoan amd64 libc6-i386
+
+get_current_ubuntu focal i386 libc6
+get_current_ubuntu focal amd64 libc6
+get_current_ubuntu focal amd64 libc6-i386
 
 get_all_ubuntu archive-eglibc http://security.ubuntu.com/ubuntu/pool/main/e/eglibc/
 get_all_ubuntu archive-glibc http://security.ubuntu.com/ubuntu/pool/main/g/glibc/
